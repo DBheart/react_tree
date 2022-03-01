@@ -1,4 +1,6 @@
 리액트 트리를 위한 테스트
+yarn add rc-tree
+npm install rc-tree
 
 트리 타입
   1. 기본적인 데이터만 들어가는 것
