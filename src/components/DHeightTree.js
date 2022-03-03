@@ -23,7 +23,7 @@ DHeightTree.defaultProps ={
 }
 
 DHeightTree.propTypes ={
-  treeDAta : PropTypes.array,
+  treeData : PropTypes.array,
   height: PropTypes.string,
 }
 
