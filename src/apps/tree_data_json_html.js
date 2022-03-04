@@ -1,7 +1,9 @@
+import React from "react";
+
 export const treeData = [
   {
     key: '0',
-    title: '첫번째노드',
+    title: <div style={{display:"flex", justifyContent:"space-between", width:"300px",  }}><span style={{color:"red"}}>첫번째노드</span><span>마지막 발악</span></div>,
     children: [
       { key: '0-0', title: 'node 0-0' },
       { key: '0-1', title: 'node 0-1' },

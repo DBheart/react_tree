@@ -2,7 +2,7 @@ import React from 'react';
 import DHeightTree from "../components/DHeightTree";
 import DRenderTree from "../components/DRenderTree";
 
-function DefaultCheckTree(props) {
+function DefaultTreeApp(props) {
   const treeData = [
     {
       key: '0',
@@ -91,4 +91,4 @@ function DefaultCheckTree(props) {
   )
 }
 
-export default DefaultCheckTree;
+export default DefaultTreeApp;

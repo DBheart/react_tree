@@ -9,18 +9,18 @@ function DSortableTree(props) {
 
   const style = { border: '1px solid #000', minHeight:props.height}
 
-  const allowDrop = (allProps) =>{
-    console.log('allowDrop',allProps)
-    //{ dropNode, dropPosition }
-
-    return true
-
-
-  }
-
-  const onDragStart = (a,b,c) =>{
-    console.log('onDragStart')
-  }
+  // const allowDrop = (allProps) =>{
+  //   console.log('allowDrop',allProps)
+  //   //{ dropNode, dropPosition }
+  //
+  //   return true
+  //
+  //
+  // }
+  //
+  // const onDragStart = (a,b,c) =>{
+  //   console.log('onDragStart')
+  // }
 
   const onDrop = (info) =>{
     console.log('onDrop',info)
@@ -30,16 +30,18 @@ function DSortableTree(props) {
   return (
     <Tree
       treeData={treeData}
+      showLine={true}
       style={style}
       height={props.height}
       defaultExpandAll={true}
-      // allowDrop={allowDrop}
       draggable={true}
+      onDrop={onDrop}
+      // allowDrop={allowDrop}
       // draggable={{
       //   icon: '↕️',
       // }}
       // onDragStart={onDragStart}
-      onDrop={onDrop}
+
     />
   );
 }

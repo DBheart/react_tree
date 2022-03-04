@@ -1,21 +1,23 @@
 import React from 'react';
-import DefaultCheckTree from "./DefaultCheckTree";
+import DefaultTreeApp from "./DefaultTreeApp";
 import {Route,Routes} from "react-router-dom";
-import DropDownTree from "./DropDownTree";
+import DropDownTreeApp from "./DropDownTreeApp";
 import FilterTreeApp from "./FilterTreeApp";
 import ManageTreeApp from "./ManageTreeApp";
 import SortableTreeApp from "./SortableTreeApp";
+import CheckTreeApp from "./CheckTreeApp";
 
 
 const Apps = () =>{
   return (
     <>
       <Routes>
-        <Route path="/" element={<DefaultCheckTree />} />
-        <Route path={"/dd"} element={<DropDownTree/>} />
+        <Route path="/" element={<DefaultTreeApp />} />
+        <Route path={"/dd"} element={<DropDownTreeApp/>} />
         <Route path={"/filter"} element={<FilterTreeApp/>} />
         <Route path={"/manage"} element={<ManageTreeApp/>} />
         <Route path={"/sortable"} element={<SortableTreeApp/>} />
+        <Route path={"/check"} element={<CheckTreeApp/>} />
       </Routes>
     </>
   )

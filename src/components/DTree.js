@@ -7,7 +7,7 @@ function DTree({treeData}) {
   return (
     <Tree
       treeData={treeData}
-
+      showLine={true}
     />
   );
 }

@@ -31,6 +31,7 @@ function DRenderTree(props) {
       <Tree
         className={"tree_title_render"}
         treeData={props.treeData}
+        showLine={true}
         style={style}
         height={props.height}
         defaultExpandAll={true}

@@ -10,6 +10,7 @@ function DHeightTree(props) {
   return (
     <Tree
       treeData={props.treeData}
+      showLine={true}
       style={style}
       height={props.height}
       defaultExpandAll={true}

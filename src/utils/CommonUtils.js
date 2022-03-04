@@ -1,3 +1,5 @@
+const CHILD_FIELD = "children";
+
 /**
  * 특정 값을 복사해서 필드를 생성한다.
  * entity에 children이 있을겨우 무한으로 호출하여서 진행한다.
@@ -41,6 +43,20 @@ export const loop = (data, key, callback) => {
     }
     if (item.children) {
       loop(item.children, key, callback);
+    }
+  });
+};
+
+//이곳의 childField는 children으로 통일하자...이것을 써놓는 것도 좋을것 같다.
+
+export const loopNewFn = (data, key, childField, callback) => {
+  data.forEach((item, index, arr) => {
+    if (item.key === key) {
+      callback(item, index, arr);
+      return;
+    }
+    if (Array.isArray(item[childField])) {
+      loopNewFn(item[childField], key, childField, callback);
     }
   });
 };
@@ -117,9 +133,163 @@ const treeDropData = (info,treeData=[]) => {
   return data
 };
 
-/**
- * 리스트에 대한 데이터 구조를 children으로 바꾸어 준다.
- */
-export const listTochildren = () =>{
-
+export const filterFn = (array, text) =>{
+  const getNodes = (result, object) => {
+    // if (object.title.indexOf(text) > -1) {
+    if (object.title.includes(text)) {
+      result.push(object);
+      return result;
+    }
+    if (Array.isArray(object.children)) {
+      const children = object.children.reduce(getNodes, []);
+      if (children.length) result.push({ ...object, children });
+    }
+    return result;
+  };
+  return array.reduce(getNodes, []);
 }
+
+export const filterNewFn = (array, text, compareField) =>{
+  const getNodes = (result=[], object={}) => {
+    try{
+      // if (object.title.indexOf(text) > -1) {//아래와 같은 뜻이다. js 버전이 낮으면 이걸 써야 한다.
+      if (object[compareField].includes(text)) {
+        result.push(object);
+        return result;
+      }
+      if (Array.isArray(object[CHILD_FIELD])) {
+        const children = object[CHILD_FIELD].reduce(getNodes, []);
+        if (children.length) result.push({ ...object, children });
+      }
+    }catch (e) {
+      console.log(e)
+      console.log('비교값을 text,number등으로 변경하십시요. object나 html값은 허용하지 않습니다.')
+    }
+
+    return result;
+  };
+  return array.reduce(getNodes, []);
+}
+
+
+//--------------------------------------------------------------------------
+// 참조 : http://daplus.net/javascript-%EC%9E%90%EB%B0%94-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EC%9D%98-%ED%94%8C%EB%9E%AB-%EB%B0%B0%EC%97%B4%EC%97%90%EC%84%9C-%ED%8A%B8%EB%A6%AC-%EB%B0%B0%EC%97%B4-%EB%B9%8C%EB%93%9C/
+
+/**
+ * 부모가 항상 자녀보다 먼저 오는 경우만 가능하다.
+ * 플랫 배열 -> 트리 배열 ,
+ * 부모와 자식 필드가 있어야 한다.
+ * @param list, 정렬된 flat 구조 리스트
+ * @param id, 자식ID
+ * @param parendId, 부모ID
+ * @returns {*[]}, tree 구조
+ */
+export const list_to_tree = (list,id,parendId) => {
+  let map = {}, node, roots = [], i;
+
+  for (i = 0; i < list.length; i += 1) {
+    map[list[i][id]] = i; // initialize the map
+    list[i][CHILD_FIELD] = []; // initialize the children
+  }
+
+  for (i = 0; i < list.length; i += 1) {
+    node = list[i];
+    if (node[parendId]!== "0") {
+      // if you have dangling branches check that map[node.parentId] exists
+      list[map[node[parendId]]][CHILD_FIELD].push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+
+
+ // 예제
+ //  let entries = [
+ //    {"id": "12", "parentId": "0", "text": "Man", "level": "1", "children": null},
+ //    {"id": "6", "parentId": "12", "text": "Boy", "level": "2", "children": null},
+ //    {"id": "7", "parentId": "12", "text": "Other", "level": "2", "children": null},
+ //    {"id": "9", "parentId": "0", "text": "Woman", "level": "1", "children": null},
+ //    {"id": "11", "parentId": "9", "text": "Girl", "level": "2", "children": null}
+ //  ];
+ //
+ //  console.log('정렬된 flat list -> tree',list_to_tree(entries,"id","parentId"));
+}
+
+/**
+ * 부모값이 무엇인지 중요하지 않다.
+ * @param arr
+ * @param childField
+ * @param parentField
+ * @returns {*[]}
+ */
+export const un_flat_ten = (arr,childField, parentField) => {
+  let tree = [],
+      mappedArr = {},
+      arrElem,
+      mappedElem;
+
+  // First map the nodes of the array to an object -> create a hash table.
+  for(let i = 0, len = arr.length; i < len; i++) {
+    arrElem = arr[i];
+    mappedArr[arrElem[childField]] = arrElem;
+    mappedArr[arrElem[childField]][CHILD_FIELD] = [];
+  }
+
+
+  for (let id in mappedArr) {
+    if (mappedArr.hasOwnProperty(id)) {
+      mappedElem = mappedArr[id];
+      // If the element is not at the root level, add it to its parent array of children.
+      if (mappedElem[parentField]) {
+        mappedArr[mappedElem[parentField]][CHILD_FIELD].push(mappedElem);
+      }
+      // If the element is at the root level, add it to first level elements array.
+      else {
+        tree.push(mappedElem);
+      }
+    }
+  }
+  return tree;
+}
+
+// let arr = [
+//           {'id':1 ,'parentid' : null},// or           {'id':1 ,'parentid' : 0},
+//           {'id':4 ,'parentid' : 2},
+//           {'id':3 ,'parentid' : 1},
+//           {'id':5 ,'parentid' : 0},
+//           {'id':6 ,'parentid' : 0},
+//           {'id':2 ,'parentid' : 1},
+//           {'id':7 ,'parentid' : 4},
+//           {'id':8 ,'parentid' : 1}
+//         ];
+//
+//
+//   let tree = un_flat_ten(arr, "id","parentid");
+//   console.log(tree)
+
+
+
+/**
+ * id 필드가 고정으로 있어야 진행된다.
+ * root노드의 값이 반드시 null이어야 한다.
+ * @param items
+ * @param id , 필수 필드
+ * @param parentField, 부모 필드
+ */
+//이건 함수로 만들기보다는.. 그냥 직접 쓰는게 나을것 같다.
+export const nest = (items, id = null, parentField = 'parent_id') => items
+    .filter(item => item[parentField] === id)
+    .map(item => ({ ...item, children: nest(items, item.id) }));
+
+
+//  예제
+//  const comments = [
+//   {id: 1,parent_id: null},
+//   {id: 2, parent_id: 1},
+//   {id: 3, parent_id: 1},
+//   {id: 4, parent_id: 2},
+//   {id: 5, parent_id: 4},
+// ];
+//  console.log(nest(arr))
+

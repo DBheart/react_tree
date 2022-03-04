@@ -1,13 +1,12 @@
 import React from 'react';
-import DTree from "../components/DTree";
 import {treeData} from "./tree_data_json";
-
+import DFilterTree from "../components/DFilterTree";
 
 function FilterTreeApp(props) {
+
   return (
     <div>
-      <input/>
-      <DTree treeData={treeData} />
+      <DFilterTree treeData={treeData}/>
     </div>
   );
 }
