@@ -6,7 +6,7 @@
 3. 필터링 
     - dropdown 확인 : 이사님것이 더 좋아보인다.
 4. 컨텍스트메뉴는... 쓰지 말자.
-5. 플랫한 데이터를 tree데이터로 전환하는 방법은 무엇이 있을까?
+5. 플랫한 데이터를 tree 데이터로 전환하는 방법은 무엇이 있을까?
 
 ---
     console.log('dragObject',dragObj)
@@ -83,7 +83,7 @@ const loop = data =>
 </Tree>
 ```
 
-2. treeData의 값에 html을 넣는다.
+2. "treeData"의 값에 "html"을 넣는다.
 ```javascript
 function getTreeData() {
   // return [
