@@ -1,3 +1,14 @@
+남은 것
+1. 체크박스 : 그냥 checkable와 onCheck 이벤트만 쓰면 될것 같은데?
+  - basic 확인
+2. 드롭박스 트리 : 여기있는것보다... 이사님이 만든게 훨씬 좋아보인다.
+    - dropdown 확인
+3. 필터링 
+    - dropdown 확인 : 이사님것이 더 좋아보인다.
+4. 컨텍스트메뉴는... 쓰지 말자.
+5. 플랫한 데이터를 tree데이터로 전환하는 방법은 무엇이 있을까?
+
+---
     console.log('dragObject',dragObj)
     console.log('dragrNode', info.dragNode)
     console.log('dropPosition', dropPosition)
@@ -31,6 +42,88 @@
             - 그러기 위해서는 저장전까지 값을 가지고 있어야 한다. 
     - 저장후 리로드를 하는게 맞을까?
 
+---
+
+multi : 여러개를 선택하는 옵션 , onSelect에서 선택한것을 확인할수 있다.
+  - 체크가 있는데.. 멀티 셀렉트가 필요할까?
+checkStrictly : 부모를 체크 선택한다고 하위 모두 선택되지 않게 하는 옵션
+컨텍스트메뉴도 잘쓰지 않는다.
+  - 바로 수정이 없네?
+모션은 모에 쓰는 걸까?  
+
+
+렌더링을 위한 조치
+1. TreeNode로 하위값을 넣는다.
+```javascript
+const loop = data =>
+  data.map(item => {
+    if (item.children) {
+      return (
+        <TreeNode key={item.key} title={item.title} disableCheckbox={item.key === '0-0-0-key'}>
+          {loop(item.children)}
+        </TreeNode>
+      );
+    }
+    return <TreeNode key={item.key} title={item.title} />;
+  });
+```
+
+``` html
+<Tree
+  checkable
+  onExpand={this.onExpand}
+  expandedKeys={this.state.expandedKeys}
+  autoExpandParent={this.state.autoExpandParent}
+  onCheck={this.onCheck}
+  checkedKeys={this.state.checkedKeys}
+  onSelect={this.onSelect}
+  selectedKeys={this.state.selectedKeys}
+>
+  {loop(gData)}
+</Tree>
+```
+
+2. treeData의 값에 html을 넣는다.
+```javascript
+function getTreeData() {
+  // return [
+  //   { key: '00', children: [{ key: '000' }, { key: '001' }] },
+  //   { key: '01', children: [{ key: '010' }, { key: '011' }] },
+  // ];
+
+  return groupList(
+    data.map(item => ({
+      title: () => renderTitle(item.fieldName),
+      key: item.fieldName,
+      checkable: true,
+      ...item,
+    })),
+    'id',
+    [],
+  );
+}
+```
+
+```html
+<div style={{ flex: '1 1 50%' }}>
+  <h3>With Virtual</h3>
+  <Tree
+    checkable
+    defaultExpandAll={false}
+    motion={motion}
+    height={200}
+    checkedKeys={keys}
+    itemHeight={20}
+    onCheck={checkedKeys => {
+      console.log('onCheck:', checkedKeys);
+      setKeys(checkedKeys);
+    }}
+    style={{ border: '1px solid #000' }}
+    treeData={getTreeData()}
+  />
+</div>
+
+```
 ---
 
 리액트 트리를 위한 테스트
