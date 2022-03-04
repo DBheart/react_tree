@@ -1555,3 +1555,24 @@ webpack 5.69.1 compiled successfully in 5857 ms
 
 
 ```
+
+```  
+2022-03-05 마지막 커밋에서 시간 확인
+
+assets by status 6.94 KiB [cached] 1 asset
+assets by chunk 2.15 MiB (name: main)
+  asset static/js/bundle.js 2.13 MiB [emitted] (name: main) 1 related asset
+  asset main.9ac34589931725e8d320.hot-update.js 16.1 KiB [emitted] [immutable] [hmr] (name: main) 1 related asset
+assets by path *.json 611 bytes
+  asset asset-manifest.json 583 bytes [emitted]
+  asset main.9ac34589931725e8d320.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+asset index.html 1.8 KiB [emitted]
+Entrypoint main 2.15 MiB (2.01 MiB) = static/js/bundle.js 2.13 MiB main.9ac34589931725e8d320.hot-update.js 16.1 KiB 2 auxiliary assets
+cached modules 1.82 MiB [cached] 238 modules
+runtime modules 31.4 KiB 15 modules
+javascript modules 12 KiB
+  ./src/apps/index.js 3.94 KiB [code generated]
+  ./src/apps/DropDownTreeApp.js 8.01 KiB [built] [code generated]
+webpack 5.70.0 compiled successfully in 224 ms
+
+```
