@@ -1,7 +1,33 @@
+결과물
+"nc tree"는 자식 필드가 children이어야 한다.
+"key"와 "title"이 있어야 한다.
+
+1. 트리 샘플
+   1. MainApp을 확인
+```html
+    <ul>
+      <li><a href="/default">기본트리</a></li>
+      <li><a href="/dd">드롭다운 트리</a></li>
+      <li><a href="/filter">필터트리</a></li>
+      <li><a href="/manage">트리 관리</a></li>
+      <li><a href="/sortable">Drag&Drop 트리</a></li>
+      <li><a href="/check">체크박스 트리</a></li>
+    </ul>
+```
+2. 유틸 
+   1. 데이터 변환 : flat -> 트리데이터, CommonUtils.un_flat_ten
+   2. 데이터 변환 : 트리데이터 -> flat, 구지만들 필요있나?
+   3. 데이터 변환 : 트리데이터 필값을 복사하여 하나더 만든다.
+      - addNewKey([원본필드,타켓필드],[원본필드,타켓필드],[원본필드,타켓필드])
+      - 자식 필드가 "children"이어야 한다. 
+   4. 데이터 변환 : 트리데이터에서 특정 "key"의 값에 대한 함수를 실행한다.
+      - loop(트리데이터, 키값, 실행함수)
+      - 자식 필드가 "children"이어야 한다.
+
 남은 것 : 완료
 1. 체크박스 : 그냥 checkable와 onCheck 이벤트만 쓰면 될것 같은데?
   - basic 확인
-2. 드롭박스 트리 : 여기있는것보다... 이사님이 만든게 훨씬 좋아보인다.
+2. 드롭박스 트리 : 완료
     - dropdown 확인
 3. 필터링 
     - dropdown 확인 : 이사님것이 더 좋아보인다.

@@ -86,6 +86,8 @@ function DefaultTreeApp(props) {
   return (
     <div>초기 환경을 가져갑니다.
       <DHeightTree treeData={treeData} height={"600px"}/>
+      <div>disabled를 보여줄 것.. 귀찮아서 넘겼다..</div>
+      <DRenderTree treeData={treeData} height={"300px"}/>
       <DRenderTree treeData={treeData} height={"300px"}/>
     </div>
   )
