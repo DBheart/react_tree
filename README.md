@@ -1,3 +1,9 @@
+추후할 것
+1. sortable tree로도 한번 더해 보자.
+
+2. ul/li로 간단한 treeView를 만들자.
+
+---
 결과물
 "nc tree"는 자식 필드가 children이어야 한다.
 "key"와 "title"이 있어야 한다.
