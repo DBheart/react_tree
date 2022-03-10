@@ -8,6 +8,8 @@
 4. 컨텍스트메뉴는... 쓰지 말자.
 5. 플랫한 데이터를 tree 데이터로 전환하는 방법은 무엇이 있을까?
 
+* 순서 바꾸는게 참... 큰일인데? 이전에는 어떻게 해주었지?
+
 ---
     console.log('dragObject',dragObj)
     console.log('dragrNode', info.dragNode)

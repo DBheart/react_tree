@@ -65,14 +65,25 @@ export const handleTreeDrop = (info, treeData=[], callback) => {
   callback(treeDropData(info, treeData))
 }
 
-
-const treeDropData = (info,treeData=[]) => {
+/**
+ * parentId, depth, seq를 구해서 변경하기 위해서 사용한다.
+ * parentId는 자신만 수정하고
+ * depth는 자식의 값을 자신의 값에서 하나씩 더해주어야 한다.
+ * seq는 같은 부모에 있는 것을  순서대로 만들어서 주어야한다.
+ * @param info
+ * @param treeData
+ * @returns {{changeList: *[], dropData, friendList: (*&{seq: *})[]}}
+ */
+export const treeDropData = (info,treeData=[]) => {
   console.log('drop', info);
   const dropKey = info.node.key;
   const dragKey = info.dragNode.key;
   const dropPos = info.node.pos.split('-');
   const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
-
+  // dropPostion
+  // 0 - 드래그한곳과 깊이가 다른것 (drop이 drag보다 깊이가 깊은 것)
+  // 1 - 드래그한곳과 깊이가 같은곳
+  // -1 : 제일 위인곳, drag한곳 위에 아무것도 없을 때(제일 위)
   // const dropPosition = info.dropPosition;
 
   const data = [...treeData];
@@ -90,28 +101,31 @@ const treeDropData = (info,treeData=[]) => {
   //이렇게 가져오면 불필요한것을 가져오기때문에 지양한다.
   // dragObj = info.dragNode
 
-  console.log('data', data)
-  console.log('dragObject',dragObj)
-  console.log('dragrNode', info.dragNode)
-  console.log('dropPosition', dropPosition)
-  console.log('info dropPosition', info.dropPosition)
-  console.log('info.node.pos', info.node.pos)
-  console.log('dropPos', info.node.pos.split('-'))
-  console.log('dropPosValue', dropPos[dropPos.length-1])
+  // console.log('data', data)
+  // console.log('dragObject',dragObj)
+  // console.log('dragrNode', info.dragNode)
+  // console.log('dropPosition', dropPosition)
+  // console.log('info dropPosition', info.dropPosition)
+  // console.log('info.node.pos', info.node.pos)
+  // console.log('dropPos', info.node.pos.split('-'))
+  // console.log('dropPosValue', dropPos[dropPos.length-1])
   // console.log('dropPosition', info.dropPosition)
-  console.log('order', info.dropPosition)
-  console.log('depth',dropPos.length) //depth가 맞지 않는다...
+  // console.log('order', info.dropPosition)
+
+  console.log('drag data', dragObj);
+  console.log('drop data', info.node)
   console.log('dropKey', dropKey, dragKey)
 
+  //dropPostion : -1이면 위에 노드가 없는 것
+  //dropPostion : 0 이면 위에 노드와 깊이가 다른 것
+  //dropPostion : 1 이면 위에 노드와 깊이가 같은 것
   if (dropPosition === 0) {//폴더의 처음 부분, 또는 폴더가 만들어지는 부분
     // Drop on the content
     loop(data, dropKey, item => {
-      // eslint-disable-next-line no-param-reassign
       item.children = item.children || [];
-      // where to insert 示例添加到尾部，可以是随意位置
       item.children.unshift(dragObj);
     });
-  } else {//이미 폴더가 있는 부분
+  } else {
     // Drop on the gap (insert before or insert after)
     let ar;
     let i;
@@ -119,19 +133,71 @@ const treeDropData = (info,treeData=[]) => {
       ar = arr;
       i = index;
     });
-    if (dropPosition === -1) {//부모가 없는 곳
+    if (dropPosition === -1) {//
       ar.splice(i, 0, dragObj);
     } else {
       ar.splice(i + 1, 0, dragObj);
     }
   }
 
+  let friendList = []
+  loop(data, dragKey, (item,index,parentItem) =>{
+    console.log('drag seq', index)
+    dragObj.seq = index
+    friendList = parentItem
+  })
+
+  valueChange(dragObj, info.node, dropPosition)
+
+  loopChildDepth(dragObj, dragObj,depth);
+
+  friendList = friendList.map((data, index) => ({...data, seq:index}))
+
   // this.setState({
   //   gData: data,
   // });
 
-  return data
+  return {changeList:data, dropData:dragObj, friendList:friendList}
 };
+
+
+  //dropPostion : -1이면 위에 노드가 없는 것
+  //dropPostion : 0 이면 위에 노드와 깊이가 다른 것
+  //dropPostion : 1 이면 위에 노드와 깊이가 같은 것
+/**
+ *
+ * @param dragObj
+ * @param dropObj
+ * @param dropPos
+ */
+const valueChange = (dragObj, dropObj, dropPos) =>{
+  if(dropPos === -1){
+    dragObj.parent_id = null
+    dragObj.depth = 0
+    dragObj.seq = 0
+
+  }else if(dropPos ===0){
+    dragObj.parent_id = dropObj.id
+    dragObj.depth = dropObj.depth + 1
+    dragObj.seq = 0
+  }else{
+    dragObj.parent_id = dropObj.parent_id
+    dragObj.depth = dropObj.depth
+  }
+}
+
+const loopChildDepth = (data, parentDepth) =>{
+  if(data.children){
+    const changeDepth = parentDepth + 1
+    data.children.forEach(item =>{
+      item.depth = changeDepth
+
+      if(item.children){
+        loopChildDepth(item, changeDepth)
+      }
+    })
+  }
+}
 
 export const filterFn = (array, text) =>{
   const getNodes = (result, object) => {
