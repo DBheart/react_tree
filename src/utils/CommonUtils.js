@@ -67,15 +67,14 @@ export const handleTreeDrop = (info, treeData=[], callback) => {
 
 /**
  * parentId, depth, seq를 구해서 변경하기 위해서 사용한다.
- * parentId는 자신만 수정하고
- * depth는 자식의 값을 자신의 값에서 하나씩 더해주어야 한다.
- * seq는 같은 부모에 있는 것을  순서대로 만들어서 주어야한다.
+ * dropData에서는 0번째 있는것은 parentId를 수정해주어야하고
+ * dropData에서 children들은 depth를 수정하고
+ * friendList에서는 seq를 수정해야 한다.
  * @param info
  * @param treeData
  * @returns {{changeList: *[], dropData, friendList: (*&{seq: *})[]}}
  */
 export const treeDropData = (info,treeData=[]) => {
-  console.log('drop', info);
   const dropKey = info.node.key;
   const dragKey = info.dragNode.key;
   const dropPos = info.node.pos.split('-');
@@ -88,11 +87,9 @@ export const treeDropData = (info,treeData=[]) => {
 
   const data = [...treeData];
 
-  // Find dragObject
-  //data에서 키값을 제거한 후에 제거한 값을 돌려준다.
   let dragObj;
 
-  // 기존것 제거
+  // 기존것 제거하고 드래그한 데이터를 가져온다.
   loop(data, dragKey, (item, index, arr) => {
     arr.splice(index, 1);
     dragObj = item;
@@ -112,9 +109,9 @@ export const treeDropData = (info,treeData=[]) => {
   // console.log('dropPosition', info.dropPosition)
   // console.log('order', info.dropPosition)
 
-  console.log('drag data', dragObj);
-  console.log('drop data', info.node)
-  console.log('dropKey', dropKey, dragKey)
+  // console.log('drag data', dragObj);
+  // console.log('drop data', info.node)
+  console.log('dragKey', dragKey)
 
   //dropPostion : -1이면 위에 노드가 없는 것
   //dropPostion : 0 이면 위에 노드와 깊이가 다른 것
@@ -149,7 +146,7 @@ export const treeDropData = (info,treeData=[]) => {
 
   valueChange(dragObj, info.node, dropPosition)
 
-  loopChildDepth(dragObj, dragObj,depth);
+  loopChildDepth(dragObj, dragObj.depth);
 
   friendList = friendList.map((data, index) => ({...data, seq:index}))
 
@@ -157,6 +154,7 @@ export const treeDropData = (info,treeData=[]) => {
   //   gData: data,
   // });
 
+  console.log('dragObj', dragObj)
   return {changeList:data, dropData:dragObj, friendList:friendList}
 };
 

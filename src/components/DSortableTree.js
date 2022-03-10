@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Tree from "rc-tree/lib/Tree";
 import PropTypes from "prop-types";
 import 'rc-tree/assets/index.css'
-import {handleTreeDrop, treeDropData} from "../utils/CommonUtils";
+import {treeDropData} from "../utils/CommonUtils";
 
 /**
  * 드래그하여 순서를 변경하기 위해서는 아래의 값을 수정해야한다.
@@ -32,7 +32,7 @@ function DSortableTree(props) {
 
 
   const onDrop = (info) =>{
-    console.log('onDrop',info)
+    console.log('onDrop')
     // handleTreeDrop(info,treeData,setTreeData)
     const {changeList, dropData, friendList} = treeDropData(info,treeData)
     setTreeData(changeList)

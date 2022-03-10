@@ -6,13 +6,15 @@ import FilterTreeApp from "./FilterTreeApp";
 import ManageTreeApp from "./ManageTreeApp";
 import SortableTreeApp from "./SortableTreeApp";
 import CheckTreeApp from "./CheckTreeApp";
+import MainApp from "./MainApp";
 
 
 const Apps = () =>{
   return (
     <>
       <Routes>
-        <Route path="/" element={<DefaultTreeApp />} />
+        <Route path="/" element={<MainApp />} />
+        <Route path="/default" element={<DefaultTreeApp />} />
         <Route path={"/dd"} element={<DropDownTreeApp/>} />
         <Route path={"/filter"} element={<FilterTreeApp/>} />
         <Route path={"/manage"} element={<ManageTreeApp/>} />

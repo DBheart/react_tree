@@ -8,6 +8,7 @@ import 'rc-tree/assets/index.css'
  * @param ref : 체크한리스트
  * @returns {JSX.Element}
  * @constructor
+ * 노드를 선택하면 체크되게하면 좋을것 같다.
  */
 function DCheckTree(props,ref) {
   const  {treeData=[],checkStrictly=false } = props

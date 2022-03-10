@@ -9,7 +9,7 @@ const CheckTreeApp = (props) => {
       console.log(treeCheckList)
   }
   return (
-    <div>초기 환경을 가져갑니다.
+    <div>선택한것을 옮길때 자주사용할 것 같다.
       <button onClick={handleClick}>체크리스트 확인</button>
       <DCheckTree ref={treeCheckList} treeData={treeData} height={"600px"}/>
     </div>
